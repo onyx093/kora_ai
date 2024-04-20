@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 
+import { increaseAPILimit, checkAPILimit } from "@/lib/api-limit";
+
 const replicate = new Replicate({
   auth: process.env.REPLICATE_AI_TOKEN,
 });
@@ -18,6 +20,12 @@ export async function POST(req: Request) {
 
     if (!prompt) {
       return new NextResponse("Video prompts are required", { status: 400 });
+    }
+
+    const freeTrial = await checkAPILimit();
+
+    if (!freeTrial) {
+      return new NextResponse("Free trial has expired", { status: 403 });
     }
 
     const response = await replicate.run(
@@ -40,7 +48,9 @@ export async function POST(req: Request) {
         },
       }
     );
-    console.log(response);
+
+    await increaseAPILimit();
+    // console.log(response);
 
     return NextResponse.json(response);
   } catch (error) {
