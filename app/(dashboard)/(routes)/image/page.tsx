@@ -26,8 +26,10 @@ import { Card, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 const ImagePage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
 
@@ -46,15 +48,16 @@ const ImagePage = () => {
     try {
       console.log(values);
 
-      /* setImages([]);
+      setImages([]);
       const response = await axios.post("/api/image", values);
       const urls = response.data.map((image: { url: string }) => image.url);
 
-      setImages(urls); */
+      setImages(urls);
       form.reset();
     } catch (error: any) {
-      //TODO: Open Pro Modal
-      console.log(error);
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }
