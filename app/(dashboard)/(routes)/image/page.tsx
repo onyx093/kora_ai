@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 import Heading from "@/components/heading";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -24,9 +25,9 @@ import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { Card, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
-import { useProModal } from "@/hooks/use-pro-modal";
 
 const ImagePage = () => {
   const proModal = useProModal();
@@ -57,6 +58,8 @@ const ImagePage = () => {
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error("Something went wrong.");
       }
     } finally {
       router.refresh();

@@ -7,16 +7,17 @@ import { Music } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import Heading from "@/components/heading";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
+import { useProModal } from "@/hooks/use-pro-modal";
 import { Loader } from "@/components/loader";
 
 import { formSchema } from "./constants";
-import { useProModal } from "@/hooks/use-pro-modal";
 
 const MusicPage = () => {
   const proModal = useProModal();
@@ -41,6 +42,8 @@ const MusicPage = () => {
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error("Something went wrong.");
       }
     } finally {
       router.refresh();
