@@ -138,7 +138,7 @@ const CodePage = () => {
                     ),
                   }}
                 >
-                  {message.content || ""}
+                  {(message.content as string) || ""}
                 </ReactMarkdown>
               </div>
             ))}

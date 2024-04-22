@@ -124,7 +124,7 @@ const ConversationPage = () => {
                 )}
               >
                 {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                <p>{message.content}</p>
+                <p>{message.content as string}</p>
               </div>
             ))}
           </div>
